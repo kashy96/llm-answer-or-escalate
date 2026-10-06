@@ -1,0 +1,29 @@
+seed: 13
+output_dir: results
+pause_seconds: 0.5          # between questions; raise it if you hit rate limits
+
+data:
+  path: data/ori_pqal.json  # downloaded on first run
+  n_questions: 200          # stratified sample of the 1,000 labelled questions
+
+retrieval:
+  k: 3                      # passages retrieved per question
+
+confidence:
+  consistency_samples: 4    # extra sampled replies per question; 0 turns this off
+  sample_temperature: 0.7
+
+report:
+  confident_threshold: 0.8
+  escalation_rates: [0.1, 0.2, 0.3]
+  bootstrap: 1000
+
+# Comment out any model you are not running.
+models:
+  gemini-flash:
+    provider: gemini
+    model: gemini-3.1-flash-lite
+    requests_per_minute: 14   # free tier allows 15
+  qwen2.5-3b:
+    provider: ollama
+    model: qwen2.5:3b
