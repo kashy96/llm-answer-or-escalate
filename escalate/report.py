@@ -7,6 +7,7 @@ Writes to results/: summary.csv, RESULTS.md, error_samples.md and figures/.
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 import matplotlib
@@ -202,7 +203,12 @@ def write_error_samples(df, questions, path, per_group=10):
                 "  - category: ",
             ]
         lines.append("")
-    Path(path).write_text("\n".join(lines), encoding="utf-8")
+    path = Path(path)
+    if path.exists() and re.search(r"category: \S", path.read_text(encoding="utf-8")):
+        # keep the hand-written categories; delete the file to regenerate it
+        print(f"kept {path} (already reviewed)")
+        return
+    path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def main():
